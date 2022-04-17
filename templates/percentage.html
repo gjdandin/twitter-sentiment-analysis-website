@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+</head>
+ <body>
+  <h1>Twitter Sentiment Analysis</h1>
+  <div id='piechart' class='piechart'”></div>
+  <div id='barchart' class='barchart'”></div>
+</body>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script type='text/javascript'>
+  var piegraph = {{piegraphJSON | safe}};
+  var bargraph = {{bargraphJSON | safe}};
+  Plotly.plot('piechart',piegraph,{});
+  Plotly.plot('barchart',bargraph,{});
+</script>
+</html>
