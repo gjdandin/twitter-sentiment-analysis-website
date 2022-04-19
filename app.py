@@ -72,11 +72,18 @@ def twittersentimentgraph(searchterm=searchterm, numsearch=numsearch):
     bargraphJSON = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
 
     #Samples
-    print("Neutral tweet: " + data["samples"]["neutralsample"].text)
-    print("Positive tweet: " + data["samples"]["positivesample"].text)
-    print("Negative tweet: " + data["samples"]["negativesample"].text)
+    positivesample = data["samples"]["positivesample"]
+    negativesample = data["samples"]["negativesample"]
+    neutralsample = data["samples"]["neutralsample"]
 
-    return render_template('percentage.html', piegraphJSON=piegraphJSON, bargraphJSON=bargraphJSON)
+    print(positivesample)
+    print(negativesample)
+    print(neutralsample)
+
+    return render_template('percentage.html', piegraphJSON=piegraphJSON, bargraphJSON=bargraphJSON,
+                           positivesample=positivesample, negativesample=negativesample,
+                           neutralsample=neutralsample
+                           )
 
 if __name__ == '__main__':
     app.run()

@@ -2,17 +2,84 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+    <style>
+        .samples {
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            align-items: center;
+        }
+
+        .sample {
+            width: 400px !important;
+        }
+
+        .sample iframe {
+            border: none !important;
+            box-shadow: none !important;
+        }
+    </style>
 </head>
- <body>
+
+<body>
   <h1>Twitter Sentiment Analysis</h1>
   <div id='piechart' class='piechart'”></div>
   <div id='barchart' class='barchart'”></div>
+
+  <h3>Some samples from the analyzed data:</h3>
+  <div id="twitter-wjs" class="samples">
+     <div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
+     <div id="negative-sample-div" class="sample"><h4>Negative tweet:</h4><div id="negative-sample"></div></div>
+     <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>
+ </div>
 </body>
+
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script sync src="https://platform.twitter.com/widgets.js"></script>
 <script type='text/javascript'>
+    // Show graphs
   var piegraph = {{piegraphJSON | safe}};
   var bargraph = {{bargraphJSON | safe}};
   Plotly.plot('piechart',piegraph,{});
   Plotly.plot('barchart',bargraph,{});
+</script>
+
+<script>
+    // Embedded sample tweets
+  window.onload = function () {
+    var positive_sample_div = document.getElementById('positive-sample');
+    var id_positive_sample = "{{positivesample}}";
+
+    // Embed positive sentiment tweet from results
+    twttr.widgets
+      .createTweet(id_positive_sample, positive_sample_div, {
+        conversation: 'none', // or all
+        cards: 'hidden', // or visible
+        linkColor: '#cc0000', // default is blue
+        theme: 'light', // or dark
+      });
+
+    // Embed negative sentiment tweet from results
+    var negative_sample_div = document.getElementById('negative-sample');
+    var id_negative_sample = "{{negativesample}}";
+    twttr.widgets
+      .createTweet(id_negative_sample, negative_sample_div, {
+        conversation: 'none', // or all
+        cards: 'hidden', // or visible
+        linkColor: '#cc0000', // default is blue
+        theme: 'light', // or dark
+      });
+
+    // Embed neutral sentiment tweet from results
+    var neutral_sample_div = document.getElementById('neutral-sample');
+    var id_neutral_sample = "{{neutralsample}}";
+    twttr.widgets
+      .createTweet(id_neutral_sample, neutral_sample_div, {
+        conversation: 'none', // or all
+        cards: 'hidden', // or visible
+        linkColor: '#cc0000', // default is blue
+        theme: 'light', // or dark
+      });
+  };
 </script>
 </html>

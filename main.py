@@ -2,22 +2,21 @@ from textblob import TextBlob
 import sys, tweepy, json
 import app
 import unittest
+import os
 
 # Import date and timedelta class for yesterdays date.
 # from datetime module
 from datetime import date
 from datetime import timedelta
 
-apiKey = "*********"
-apiKeySecret = "************"
-bearerToken = '**************'
-accessToken = "****************"
-accessTokenSecret = "**********************"
+#Environment variables
+apiKey = os.environ['TWITTER_API_KEY']
+apiKeySecret = os.environ['TWITTER_API_KEY_SECRET']
+bearerToken = os.environ['TWITTER_BEARER_TOKEN']
+accessToken = os.environ['TWITTER_ACCESS_TOKEN']
+accessTokenSecret = os.environ['TWITTER_ACCESS_TOKEN_SECRET']
 
-def percentage(part, whole):
-    """Returns percentages of sentiment analysis"""
-    return 100 * float(part)/float(whole)
-
+#Twitter api authentication
 auth = tweepy.OAuthHandler(apiKey, apiKeySecret)
 auth.set_access_token(accessToken,accessTokenSecret)
 api = tweepy.API(auth)
@@ -39,6 +38,10 @@ api = tweepy.API(auth)
 #API search params
 #API.search_tweets(q, *, geocode, lang, locale, result_type, count, until, since_id,
 # max_id, include_entities)
+
+def percentage(part, whole):
+    """Returns percentages of sentiment analysis"""
+    return 100 * float(part)/float(whole)
 
 def processsentiment(searchterm, numsearch):
     #Count of tweet and sentiments
@@ -64,15 +67,15 @@ def processsentiment(searchterm, numsearch):
         if (analysis.sentiment.polarity == 0):
             neutral += 1
             if (neutralsample == ""):
-                neutralsample = tweet
+                neutralsample = tweet.id
         elif (analysis.sentiment.polarity < 0.00):
             negative += 1
             if (negativesample == ""):
-                negativesample = tweet
+                negativesample = tweet.id
         elif (analysis.sentiment.polarity > 0.00):
             positive += 1
             if (positivesample == ""):
-                positivesample = tweet
+                positivesample = tweet.id
 
     positivepercent = format(percentage(positive, numsearch), ".2f")
     negativepercent = format(percentage(negative, numsearch), ".2f")
@@ -85,16 +88,5 @@ def processsentiment(searchterm, numsearch):
                           "negativesample": negativesample}
                }
 
-    #3 examples of positive, negative, tweet processed from sample.
-    samples = {}
     return results
-
-# print("Reaction to " + searchterm + " by analyzing " + numSearch + " tweets.")
-# if (polarity == 0):
-#     print("neutral")
-# if (polarity > 0):
-#     print("positive")
-# elif (polarity < 0):
-#     print("negative")
-
 
