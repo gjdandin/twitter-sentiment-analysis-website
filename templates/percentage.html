@@ -23,8 +23,16 @@
 
 <body>
   <h1>Twitter Sentiment Analysis</h1>
-  <div id='piechart' class='piechart'”></div>
-  <div id='barchart' class='barchart'”></div>
+  <div id="inputs">
+      <label for="searchterm">Insert hashtag:</label>
+      <input type="text" id="searchterm" name="searchterm">
+      <label for="numsearch">Insert how many tweets to analyze(max 100):</label>
+      <input type="text" id="numsearch" name="numsearch">
+      <button id="submit" onclick="cb()">Submit query</button>
+  </div>
+
+  <div id='piechart' class='piechart'></div>
+  <div id='barchart' class='barchart'></div>
 
   <h3>Some samples from the analyzed data:</h3>
   <div id="twitter-wjs" class="samples">
@@ -33,9 +41,29 @@
      <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>
  </div>
 </body>
+<script>
+    function cb() {
+        let searchterm = $("#searchterm").val()
+        let numsearch = $("#numsearch").val()
+        console.log(searchterm)
+        console.log(numsearch)
 
+        $.getJSON( "/callback", {'searchterm':searchterm, 'numsearch':numsearch} )
+          .done(function( json ) {
+              console.log("Suksess!" + json.piegraphJSON);
+            Plotly.newPlot('piechart',json.piegraphJSON,{});
+            Plotly.newPlot('barchart',json.bargraphJSON,{});
+            createsamples(json.positivesample, json.negativesample, json.neutralsample);
+          })
+          .fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+        });
+    }
+</script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script sync src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type='text/javascript'>
     // Show graphs
   var piegraph = {{piegraphJSON | safe}};
@@ -45,14 +73,12 @@
 </script>
 
 <script>
-    // Embedded sample tweets
-  window.onload = function () {
-    var positive_sample_div = document.getElementById('positive-sample');
-    var id_positive_sample = "{{positivesample}}";
+    function createsamples(positivesample, negativesample, neutralsample ) {
 
     // Embed positive sentiment tweet from results
+      var positive_sample_div = document.getElementById('positive-sample');
     twttr.widgets
-      .createTweet(id_positive_sample, positive_sample_div, {
+      .createTweet(positivesample.toString(), positive_sample_div, {
         conversation: 'none', // or all
         cards: 'hidden', // or visible
         linkColor: '#cc0000', // default is blue
@@ -61,9 +87,8 @@
 
     // Embed negative sentiment tweet from results
     var negative_sample_div = document.getElementById('negative-sample');
-    var id_negative_sample = "{{negativesample}}";
     twttr.widgets
-      .createTweet(id_negative_sample, negative_sample_div, {
+      .createTweet(negativesample.toString(), negative_sample_div, {
         conversation: 'none', // or all
         cards: 'hidden', // or visible
         linkColor: '#cc0000', // default is blue
@@ -72,14 +97,17 @@
 
     // Embed neutral sentiment tweet from results
     var neutral_sample_div = document.getElementById('neutral-sample');
-    var id_neutral_sample = "{{neutralsample}}";
     twttr.widgets
-      .createTweet(id_neutral_sample, neutral_sample_div, {
+      .createTweet(neutralsample.toString(), neutral_sample_div, {
         conversation: 'none', // or all
         cards: 'hidden', // or visible
         linkColor: '#cc0000', // default is blue
         theme: 'light', // or dark
       });
-  };
+  }
+    // Embedded sample tweets
+  window.onload = createsamples("{{positivesample}}","{{negativesample}}", "{{neutralsample}}");
+
+
 </script>
 </html>

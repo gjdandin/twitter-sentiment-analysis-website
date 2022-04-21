@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pandas as pd
 import json
 import plotly
@@ -8,12 +8,19 @@ import plotly.graph_objects as go
 
 app = Flask(__name__)
 
-#User inputs
-searchterm = input("Enter hashtag to search about: ")
-numsearch = input("Enter number of tweets to analyze: ")
+@app.route('/callback', methods=['POST', 'GET'])
+def cb():
+    return json.dumps(twittersentimentgraph(searchterm=request.args.get('searchterm'), numsearch=request.args.get('numsearch')))
 
 @app.route('/')
-def twittersentimentgraph(searchterm=searchterm, numsearch=numsearch):
+def index():
+    results = twittersentimentgraph()
+    return render_template('percentage.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
+                           positivesample=results["positivesample"], negativesample=results["negativesample"],
+                           neutralsample=["neutralsample"]
+                           )
+
+def twittersentimentgraph(searchterm="Bitcoin", numsearch="10"):
     data = main.processsentiment(searchterm, numsearch)
 
     #First figure - piechart - percentages
@@ -80,10 +87,13 @@ def twittersentimentgraph(searchterm=searchterm, numsearch=numsearch):
     print(negativesample)
     print(neutralsample)
 
-    return render_template('percentage.html', piegraphJSON=piegraphJSON, bargraphJSON=bargraphJSON,
-                           positivesample=positivesample, negativesample=negativesample,
-                           neutralsample=neutralsample
-                           )
+    funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
+                           "positivesample":positivesample, "negativesample":negativesample,
+                          "neutralsample":neutralsample}
+
+    return funcresults
+
+
 
 if __name__ == '__main__':
     app.run()
