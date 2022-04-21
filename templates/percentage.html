@@ -27,7 +27,7 @@
         console.log(numsearch)
 
         req = $.ajax({
-                url : "/",
+                url : "/callback",
                 type : "GET",
                 data : {'searchterm':searchterm, 'numsearch':numsearch}
         });
@@ -35,8 +35,10 @@
         req.done(function(data) {
             $("#piechart").fadeOut(100).fadeIn(100);
             $("#barchart").fadeOut(100).fadeIn(100);
-            var graphs = data;
-
+            var graphs = JSON.parse(data);
+            console.log(JSON.parse(graphs.piegraphJSON));
+            Plotly.react('piechart', JSON.parse(graphs.piegraphJSON), {});
+            Plotly.react('barchart', JSON.parse(graphs.bargraphJSON), {});
         });
     }
 </script>
