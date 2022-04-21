@@ -19,6 +19,27 @@
             box-shadow: none !important;
         }
     </style>
+    <script>
+    function cb() {
+        let searchterm = $("#searchterm").val()
+        let numsearch = $("#numsearch").val()
+        console.log(searchterm)
+        console.log(numsearch)
+
+        req = $.ajax({
+                url : "/",
+                type : "GET",
+                data : {'searchterm':searchterm, 'numsearch':numsearch}
+        });
+
+        req.done(function(data) {
+            $("#piechart").fadeOut(100).fadeIn(100);
+            $("#barchart").fadeOut(100).fadeIn(100);
+            var graphs = data;
+
+        });
+    }
+</script>
 </head>
 
 <body>
@@ -41,26 +62,6 @@
      <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>
  </div>
 </body>
-<script>
-    function cb() {
-        let searchterm = $("#searchterm").val()
-        let numsearch = $("#numsearch").val()
-        console.log(searchterm)
-        console.log(numsearch)
-
-        $.getJSON( "/callback", {'searchterm':searchterm, 'numsearch':numsearch} )
-          .done(function( json ) {
-              console.log("Suksess!" + json.piegraphJSON);
-            Plotly.newPlot('piechart',json.piegraphJSON,{});
-            Plotly.newPlot('barchart',json.bargraphJSON,{});
-            createsamples(json.positivesample, json.negativesample, json.neutralsample);
-          })
-          .fail(function( jqxhr, textStatus, error ) {
-            var err = textStatus + ", " + error;
-            console.log( "Request Failed: " + err );
-        });
-    }
-</script>
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script sync src="https://platform.twitter.com/widgets.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
