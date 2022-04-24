@@ -83,16 +83,19 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
-    positivesamplejson = {"text":positivesample.text, "author_id":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    negativesamplejson = {"text": negativesample.text, "author_id": negativesample.author.name,
+    positivesamplejson = {"text":positivesample.text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+    negativesamplejson = {"text": negativesample.text, "author": negativesample.author.name,
                       "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    neutralsamplejson = {"text": neutralsample.text, "author_id": neutralsample.author.name,
+    neutralsamplejson = {"text": neutralsample.text, "author": neutralsample.author.name,
                       "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
 
     positivesamplejson = json.dumps(positivesamplejson)
     negativesamplejson = json.dumps(negativesamplejson)
     neutralsamplejson = json.dumps(neutralsamplejson)
 
+    print(positivesample.author.name)
+    print(negativesample.author.name)
+    print(neutralsample.author.name)
 
     funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
                            "positivesample":positivesamplejson,

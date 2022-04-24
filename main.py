@@ -64,22 +64,35 @@ def processsentiment(searchterm, numsearch):
         analysis = TextBlob(tweet.text)
         polarity += analysis.sentiment.polarity
 
-        if (analysis.sentiment.polarity <= 0.05 and analysis.sentiment.polarity >= -0.05):
+        if (analysis.sentiment.polarity == 0):
             neutral += 1
             if (neutralsample == ""):
                 neutralsample = tweet
-        elif (analysis.sentiment.polarity < -0.05):
+
+        elif (analysis.sentiment.polarity < 0.00):
             negative += 1
             if (negativesample == ""):
                 negativesample = tweet
-            elif (negativesample != "" and analysis.sentiment.polarity < TextBlob(negativesample.text).sentiment.polarity):
-                negativesample = tweet
+
         elif (analysis.sentiment.polarity > 0.05):
             positive += 1
             if (positivesample == ""):
                 positivesample = tweet
-            elif (positivesample != "" and analysis.sentiment.polarity > TextBlob(positivesample.text).sentiment.polarity):
-                positivesample = tweet
+
+
+    # Fix this error handling - sometimes neutral is set as "!-"
+    dummy_sample = tweets[0]
+    dummy_sample.author.name = "!-"  # set as non-allowed twitter user name for the conditional in createsample() in percentage.html
+
+    #if one of the samples are empty - set it as dummy_sample
+    if neutralsample == "":
+        neutralsample = dummy_sample
+
+    if positivesample == "":
+        positivesample = dummy_sample
+
+    if negativesample == "":
+        negativesample = dummy_sample
 
     positivepercent = format(percentage(positive, numsearch), ".2f")
     negativepercent = format(percentage(negative, numsearch), ".2f")

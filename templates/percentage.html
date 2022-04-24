@@ -84,9 +84,15 @@
     function createsample(sample, sample_div) {
         // Embed sentiment tweet from results
         sample = JSON.parse(sample);
-        console.log(sample);
-        let ut = "<p>" + "User " + sample.author_id + " tweets: " + "\n" + sample.text + "\n" + "Created at: " + sample.created_at + "</p>"
-        sample_div.innerHTML = ut;
+        let ut = "";
+        if (sample.author.toString() == "!-"){
+            ut = "<p>" + "Sample not found - no tweet example with this reaction from your search."
+            sample_div.innerHTML = ut;
+        }
+        else {
+            ut = "<p>" + "User " + sample.author + " tweets: " + "\n" + sample.text + "\n" + "Created at: " + sample.created_at + "</p>"
+            sample_div.innerHTML = ut;
+        }
     }
 
     {#// Embed negative sentiment tweet from results
