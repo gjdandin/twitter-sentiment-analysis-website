@@ -83,7 +83,9 @@
 
     function createsample(sample, sample_div) {
         // Embed sentiment tweet from results
-        let ut = "<p>" + "User " + sample["author_id"] + " tweets: " + "\n" + sample["text"] + "\n" + "Created at: " + sample["created_at"] + "</p>"
+        sample = JSON.parse(sample);
+        console.log(sample);
+        let ut = "<p>" + "User " + sample.author_id + " tweets: " + "\n" + sample.text + "\n" + "Created at: " + sample.created_at + "</p>"
         sample_div.innerHTML = ut;
     }
 
@@ -91,7 +93,7 @@
         // negative_sample_div.innerHTML = "";
 
     twttr.widgets
-      .createTweet(negativesample.toString(), negative_sample_div, {
+      .createTweet(negativesample, negative_sample_div, {
         conversation: 'none', // or all
         cards: 'hidden', // or visible
         linkColor: '#cc0000', // default is blue
@@ -101,7 +103,7 @@
     // Embed neutral sentiment tweet from results
 
     twttr.widgets
-      .createTweet(neutralsample.toString(), neutral_sample_div, {
+      .createTweet(neutralsample, neutral_sample_div, {
         conversation: 'none', // or all
         cards: 'hidden', // or visible
         linkColor: '#cc0000', // default is blue
@@ -109,13 +111,7 @@
       });
   }#}
     // Embedded sample tweets
-    function createsamples() {
-        createsample("{{ positivesample }}", document.getElementById('positive-sample'));
-      createsample("{{ negativesample }}",document.getElementById('negative-sample'));
-      createsample("{{ neutralsample }}",document.getElementById('neutral-sample'));
-    }
 
-    window.onload = createsamples();
 
 
 </script>

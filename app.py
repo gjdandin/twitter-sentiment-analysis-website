@@ -83,28 +83,24 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
-    positivesample = {"id":positivesample.id, "text":positivesample.text, "author_id":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    negativesample = {"id": negativesample.id, "text": negativesample.text, "author_id": negativesample.author.name,
+    positivesamplejson = {"text":positivesample.text, "author_id":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+    negativesamplejson = {"text": negativesample.text, "author_id": negativesample.author.name,
                       "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    neutralsample = {"id": neutralsample.id, "text": neutralsample.text, "author_id": neutralsample.author.name,
+    neutralsamplejson = {"text": neutralsample.text, "author_id": neutralsample.author.name,
                       "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
 
-   #positivesample = json.dumps(positivesample)
-    #negativesample = json.dumps(negativesample)
-    #neutralsample = json.dumps(neutralsample)
+    positivesamplejson = json.dumps(positivesamplejson)
+    negativesamplejson = json.dumps(negativesamplejson)
+    neutralsamplejson = json.dumps(neutralsamplejson)
 
-    print(positivesample)
-    print(negativesample)
-    print(neutralsample)
 
     funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
-                           "positivesample":positivesample,
-                            "negativesample":negativesample,
-                          "neutralsample":neutralsample,
+                           "positivesample":positivesamplejson,
+                            "negativesample":negativesamplejson,
+                          "neutralsample":neutralsamplejson,
                    }
 
     return funcresults
-
 
 
 if __name__ == '__main__':
