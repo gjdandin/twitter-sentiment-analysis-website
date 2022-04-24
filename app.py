@@ -17,7 +17,8 @@ def index():
     results = twittersentimentgraph()
     return render_template('percentage.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
                            positivesample=results["positivesample"], negativesample=results["negativesample"],
-                           neutralsample=results["neutralsample"]
+                           neutralsample=results["neutralsample"], positivesamplecounts=results["positivesamplecounts"],
+                           negativesamplecounts=results["negativesamplecounts"], neutralsamplecounts=results["neutralsamplecounts"]
                            )
 
 def twittersentimentgraph(searchterm="Putin", numsearch="10"):
@@ -83,24 +84,23 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
-    positivesamplejson = {"text":positivesample.text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    negativesamplejson = {"text": negativesample.text, "author": negativesample.author.name,
-                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
-    neutralsamplejson = {"text": neutralsample.text, "author": neutralsample.author.name,
-                      "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+    positivesamplejson = json.dumps({"text":positivesample.text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+    negativesamplejson = json.dumps({"text": negativesample.text, "author": negativesample.author.name,
+                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+    neutralsamplejson = json.dumps({"text": neutralsample.text, "author": neutralsample.author.name,
+                      "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
-    positivesamplejson = json.dumps(positivesamplejson)
-    negativesamplejson = json.dumps(negativesamplejson)
-    neutralsamplejson = json.dumps(neutralsamplejson)
-
-    print(positivesample.author.name)
-    print(negativesample.author.name)
-    print(neutralsample.author.name)
+    positivesamplecounts = data["positivecount"]
+    neutralsamplecounts = data["neutralcount"]
+    negativesamplecounts = data["negativecount"]
 
     funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
                            "positivesample":positivesamplejson,
                             "negativesample":negativesamplejson,
                           "neutralsample":neutralsamplejson,
+                          "positivesamplecounts" : positivesamplecounts,
+                        "neutralsamplecounts" : neutralsamplecounts,
+                        "negativesamplecounts" : negativesamplecounts
                    }
 
     return funcresults

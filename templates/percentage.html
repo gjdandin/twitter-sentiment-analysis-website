@@ -40,9 +40,14 @@
             var positive_sample_div = document.getElementById('positive-sample');
             var negative_sample_div = document.getElementById('negative-sample');
             var neutral_sample_div = document.getElementById('neutral-sample');
-            createsample(graphs.positivesample,positive_sample_div);
-            createsample(graphs.negativesample,negative_sample_div);
-            createsample(graphs.neutralsample,neutral_sample_div);
+
+            console.log(graphs.positivesamplecounts);
+            console.log(graphs.negativesamplecounts);
+            console.log(graphs.neutralsamplecounts);
+
+            createsample(graphs.positivesample,graphs.positivesamplecounts, positive_sample_div);
+            createsample(graphs.negativesample,graphs.negativesamplecounts, negative_sample_div);
+            createsample(graphs.neutralsample,graphs.neutralsamplecounts, neutral_sample_div);
         });
     }
 </script>
@@ -80,12 +85,12 @@
 </script>
 
 <script>
-
-    function createsample(sample, sample_div) {
+    function createsample(sample, sample_counts, sample_div) {
         // Embed sentiment tweet from results
         sample = JSON.parse(sample);
+
         let ut = "";
-        if (sample.author.toString() == "!-"){
+        if (sample_counts == 0){
             ut = "<p>" + "Sample not found - no tweet example with this reaction from your search."
             sample_div.innerHTML = ut;
         }
@@ -94,31 +99,5 @@
             sample_div.innerHTML = ut;
         }
     }
-
-    {#// Embed negative sentiment tweet from results
-        // negative_sample_div.innerHTML = "";
-
-    twttr.widgets
-      .createTweet(negativesample, negative_sample_div, {
-        conversation: 'none', // or all
-        cards: 'hidden', // or visible
-        linkColor: '#cc0000', // default is blue
-        theme: 'light', // or dark
-      });
-
-    // Embed neutral sentiment tweet from results
-
-    twttr.widgets
-      .createTweet(neutralsample, neutral_sample_div, {
-        conversation: 'none', // or all
-        cards: 'hidden', // or visible
-        linkColor: '#cc0000', // default is blue
-        theme: 'light', // or dark
-      });
-  }#}
-    // Embedded sample tweets
-
-
-
 </script>
 </html>
