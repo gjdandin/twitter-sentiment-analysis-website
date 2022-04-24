@@ -64,18 +64,22 @@ def processsentiment(searchterm, numsearch):
         analysis = TextBlob(tweet.text)
         polarity += analysis.sentiment.polarity
 
-        if (analysis.sentiment.polarity == 0):
+        if (analysis.sentiment.polarity <= 0.05 and analysis.sentiment.polarity >= -0.05):
             neutral += 1
             if (neutralsample == ""):
-                neutralsample = tweet.id
-        elif (analysis.sentiment.polarity < 0.00):
+                neutralsample = tweet
+        elif (analysis.sentiment.polarity < -0.05):
             negative += 1
             if (negativesample == ""):
-                negativesample = tweet.id
-        elif (analysis.sentiment.polarity > 0.00):
+                negativesample = tweet
+            elif (negativesample != "" and analysis.sentiment.polarity < TextBlob(negativesample.text).sentiment.polarity):
+                negativesample = tweet
+        elif (analysis.sentiment.polarity > 0.05):
             positive += 1
             if (positivesample == ""):
-                positivesample = tweet.id
+                positivesample = tweet
+            elif (positivesample != "" and analysis.sentiment.polarity > TextBlob(positivesample.text).sentiment.polarity):
+                positivesample = tweet
 
     positivepercent = format(percentage(positive, numsearch), ".2f")
     negativepercent = format(percentage(negative, numsearch), ".2f")

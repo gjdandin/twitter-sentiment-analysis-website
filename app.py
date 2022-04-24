@@ -17,10 +17,10 @@ def index():
     results = twittersentimentgraph()
     return render_template('percentage.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
                            positivesample=results["positivesample"], negativesample=results["negativesample"],
-                           neutralsample=["neutralsample"]
+                           neutralsample=results["neutralsample"]
                            )
 
-def twittersentimentgraph(searchterm="Bitcoin", numsearch="10"):
+def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     data = main.processsentiment(searchterm, numsearch)
 
     #First figure - piechart - percentages
@@ -83,13 +83,25 @@ def twittersentimentgraph(searchterm="Bitcoin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
+    positivesample = {"id":positivesample.id, "text":positivesample.text, "author_id":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+    negativesample = {"id": negativesample.id, "text": negativesample.text, "author_id": negativesample.author.name,
+                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+    neutralsample = {"id": neutralsample.id, "text": neutralsample.text, "author_id": neutralsample.author.name,
+                      "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")}
+
+   #positivesample = json.dumps(positivesample)
+    #negativesample = json.dumps(negativesample)
+    #neutralsample = json.dumps(neutralsample)
+
     print(positivesample)
     print(negativesample)
     print(neutralsample)
 
     funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
-                           "positivesample":positivesample, "negativesample":negativesample,
-                          "neutralsample":neutralsample}
+                           "positivesample":positivesample,
+                            "negativesample":negativesample,
+                          "neutralsample":neutralsample,
+                   }
 
     return funcresults
 
