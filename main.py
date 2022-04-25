@@ -54,7 +54,7 @@ def processsentiment(searchterm, numsearch):
     today = date.today()
     yesterday = today - timedelta(days = 1)
 
-    tweets = api.search_tweets(q=searchterm, lang="en", count=numsearch, until=yesterday)
+    tweets = api.search_tweets(q=searchterm, lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
 
     neutralsample = ""
     positivesample = ""
@@ -62,7 +62,7 @@ def processsentiment(searchterm, numsearch):
     dummy_sample = tweets[0]
 
     for tweet in tweets:
-        analysis = TextBlob(tweet.text)
+        analysis = TextBlob(tweet.full_text)
         polarity += analysis.sentiment.polarity
 
         if (analysis.sentiment.polarity == 0.00):

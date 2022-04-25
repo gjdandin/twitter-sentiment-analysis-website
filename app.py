@@ -17,8 +17,8 @@ def index():
     results = twittersentimentgraph()
     return render_template('percentage.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
                            positivesample=results["positivesample"], negativesample=results["negativesample"],
-                           neutralsample=results["neutralsample"], positivesamplecounts=results["positivesamplecounts"],
-                           negativesamplecounts=results["negativesamplecounts"], neutralsamplecounts=results["neutralsamplecounts"]
+                           neutralsample=results["neutralsample"], positivedatacount=results["positivedatacount"],
+                           negativedatacount=results["negativedatacount"], neutraldatacount=results["neutraldatacount"]
                            )
 
 def twittersentimentgraph(searchterm="Putin", numsearch="10"):
@@ -44,6 +44,7 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
 
     fig.update_layout(
         title_text="Percentage of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
+        paper_bgcolor='rgba(0,0,0,0)'
     )
 
     fig.add_annotation(x=0.5, y=0.5,
@@ -74,7 +75,8 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
                            legend=dict(
                                x=0,
                                y=1.0,
-                           )
+                           ),
+                           paper_bgcolor='rgba(0,0,0,0)'
                         )
 
     bargraphJSON = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
@@ -84,23 +86,24 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
-    positivesamplejson = json.dumps({"text":positivesample.text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
-    negativesamplejson = json.dumps({"text": negativesample.text, "author": negativesample.author.name,
+    positivesamplejson = json.dumps({"text":positivesample.full_text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+    negativesamplejson = json.dumps({"text": negativesample.full_text, "author": negativesample.author.name,
                       "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
-    neutralsamplejson = json.dumps({"text": neutralsample.text, "author": neutralsample.author.name,
+    neutralsamplejson = json.dumps({"text": neutralsample.full_text, "author": neutralsample.author.name,
                       "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
-    positivesamplecounts = data["positivecount"]
-    neutralsamplecounts = data["neutralcount"]
-    negativesamplecounts = data["negativecount"]
+    #Data count
+    positivedatacount = data["positivecount"]
+    neutraldatacount = data["neutralcount"]
+    negativedatacount = data["negativecount"]
 
     funcresults = {"piegraphJSON":piegraphJSON, "bargraphJSON":bargraphJSON,
                            "positivesample":positivesamplejson,
                             "negativesample":negativesamplejson,
                           "neutralsample":neutralsamplejson,
-                          "positivesamplecounts" : positivesamplecounts,
-                        "neutralsamplecounts" : neutralsamplecounts,
-                        "negativesamplecounts" : negativesamplecounts
+                          "positivedatacount" : positivedatacount,
+                        "neutraldatacount" : neutraldatacount,
+                        "negativedatacount" : negativedatacount
                    }
 
     return funcresults

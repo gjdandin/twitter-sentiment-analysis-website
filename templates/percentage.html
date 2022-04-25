@@ -1,8 +1,16 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
+        /*Background */
+        body {
+            background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );
+        }
+        /* End Background */
+
         .samples {
             display: flex;
             flex-direction: column;
@@ -14,68 +22,179 @@
             width: 400px !important;
         }
 
-        .sample iframe {
-            border: none !important;
-            box-shadow: none !important;
+        .alert alert-warning {
+            display:none;
         }
+
+        .form-horizontal {
+            display:flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        #form-container {
+            margin-top:10em;
+        }
+
+        #numsearch-input-div {
+            display:none
+        }
+
+        #piechart {
+            display: none;
+            justify-content: center;
+        }
+
+        #barchart {
+            display: none;
+            justify-content: center;
+        }
+
+        #twitter-samples {
+            display:none;
+            justify-content: center;
+        }
+
+        nav {
+            background-color: #212121;
+            height: 80px;
+            width: 100%;
+            left: 0;
+            top: 0;
+            z-index: 300;
+            box-shadow: 0px 2px 10px 0px rgba(226,240,254,1);
+            font-family: 'Playfair Display', serif;
+            position:fixed;
+            }
+
+        /*Nav logo css*/
+        nav .nav-logo {
+            float: left;
+            margin-left: 30px;
+        }
+        nav .nav-logo a {
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 80px;
+            text-transform: uppercase;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: .5px;
+        }
+        nav .nav-logo img {
+            padding: 0 10px 10px 0;
+        }
+
     </style>
     <script>
-    function cb() {
-        let searchterm = $("#searchterm").val()
-        let numsearch = $("#numsearch").val()
+        function getInputs() {
+            let searchterm = $("#searchterm").val()
+            if ((searchterm != null) && (searchterm.length < 2 || searchterm.length > 25)) {
+                document.getElementById("searchterm-error-warning").style.display = 'block';
+                document.getElementById("searchterm-error-warning").innerHTML = "<p>Search term must be longer than 2 characters and fewer than 25.</p>";
+                searchterm = "";
+            }
 
-        req = $.ajax({
-                url : "/callback",
-                type : "GET",
-                data : {'searchterm':searchterm, 'numsearch':numsearch}
-        });
+            if (searchterm !== "" && searchterm != null) {
+                // reset warnings
+                document.getElementById("searchterm-error-warning").style.display = 'none';
+                document.getElementById("searchterm-error-warning").innerHTML = "";
+                $("#numsearch-input-div").fadeIn(200);
+                document.getElementById("numsearch-input-div").style.display = 'block'
+            }
 
-        req.done(function(data) {
-            $("#piechart").fadeOut(100).fadeIn(100);
-            $("#barchart").fadeOut(100).fadeIn(100);
-            var graphs = JSON.parse(data);
-            Plotly.react('piechart', JSON.parse(graphs.piegraphJSON), {});
-            Plotly.react('barchart', JSON.parse(graphs.bargraphJSON), {});
+            let numsearch = $("#numsearch").val()
+            if (numsearch != null) {
+                if (numsearch.valueOf() > 200 || numsearch.valueOf() <= 0) {
+                    document.getElementById("numsearch-error-warning").style.display = 'block';
+                    document.getElementById("numsearch-error-warning").innerHTML = "<p>Insert a number of tweets between 1 and 200.</p>";
+                    numsearch = 0;
+                }
+            }
 
-            var positive_sample_div = document.getElementById('positive-sample');
-            var negative_sample_div = document.getElementById('negative-sample');
-            var neutral_sample_div = document.getElementById('neutral-sample');
+            if (searchterm !== "" && searchterm != null && numsearch !== 0 && numsearch != null) {
+                document.getElementById("searchterm-error-warning").style.display = 'none';
+                document.getElementById("searchterm-error-warning").innerHTML = "";
+                document.getElementById("numsearch-error-warning").style.display = 'none';
+                document.getElementById("numsearch-error-warning").innerHTML = "";
+                cb(searchterm, numsearch);
+            }
+        }
 
-            console.log(graphs.positivesamplecounts);
-            console.log(graphs.negativesamplecounts);
-            console.log(graphs.neutralsamplecounts);
+        function cb(searchterm, numsearch) {
 
-            createsample(graphs.positivesample,graphs.positivesamplecounts, positive_sample_div);
-            createsample(graphs.negativesample,graphs.negativesamplecounts, negative_sample_div);
-            createsample(graphs.neutralsample,graphs.neutralsamplecounts, neutral_sample_div);
-        });
+            req = $.ajax({
+                    url : "/callback",
+                    type : "GET",
+                    data : {'searchterm':searchterm, 'numsearch':numsearch}
+            });
+
+            req.done(function(data) {
+                var graphs = JSON.parse(data);
+                var positive_sample_div = document.getElementById('positive-sample');
+                var negative_sample_div = document.getElementById('negative-sample');
+                var neutral_sample_div = document.getElementById('neutral-sample');
+
+                document.getElementById("piechart").style.display = 'flex';
+                document.getElementById("barchart").style.display = 'flex';
+                document.getElementById("twitter-samples").style.display = 'flex';
+
+                $("#piechart").fadeOut(50).fadeIn(600);
+                $("#barchart").fadeOut(50).fadeIn(600);
+                $("#twitter-samples").fadeOut(50).fadeIn(600);
+
+                Plotly.react('piechart', JSON.parse(graphs.piegraphJSON), {});
+                Plotly.react('barchart', JSON.parse(graphs.bargraphJSON), {});
+
+                createsample(graphs.positivesample,graphs.positivedatacount, positive_sample_div);
+                createsample(graphs.negativesample,graphs.negativedatacount, negative_sample_div);
+                createsample(graphs.neutralsample,graphs.neutraldatacount, neutral_sample_div);
+            });
     }
-</script>
+    </script>
 </head>
 
 <body>
-  <h1>Twitter Sentiment Analysis</h1>
-  <div id="inputs">
-      <label for="searchterm">Insert hashtag:</label>
-      <input type="text" id="searchterm" name="searchterm">
-      <label for="numsearch">Insert how many tweets to analyze(max 100):</label>
-      <input type="text" id="numsearch" name="numsearch">
-      <button id="submit" onclick="cb()">Submit query</button>
+    <nav>
+        <div class="nav-logo">
+            <span class="fa-stack fa-lg">
+              <i class="fa fa-twitter fa-stack-2x fa-inverse"></i>
+            </span>
+            <a href="/">
+                Twitter Sentiment Analysis
+            </a>
+        </div>
+    </nav>
+  <div class="container" id="form-container">
+      <form class="form-horizontal" id="inputs">
+          <div id="searchterm-input-div" class="form-group">
+              <label for="searchterm" class="control-label">Insert a hashtag or a topic:</label>
+              <input type="text" id="searchterm" name="searchterm" class="form-control" onchange="getInputs()">
+              <div id="searchterm-error-warning" class="alert alert-warning" style="padding: 0px;margin-bottom: 0px"></div>
+          </div>
+          <div id="numsearch-input-div" class="form-group">
+              <label for="numsearch" class="control-label">Amount of tweets to analyze:</label>
+              <input type="text" id="numsearch" name="numsearch" class="form-control" onchange="getInputs()">
+              <div id="numsearch-error-warning" class="alert alert-warning" style="padding: 0px;margin-bottom: 0px"></div>
+          </div>
+      </form>
   </div>
 
   <div id='piechart' class='piechart'></div>
   <div id='barchart' class='barchart'></div>
 
-  <h3>Some samples from the analyzed data:</h3>
-  <div id="twitter-wjs" class="samples">
+  <div id="twitter-samples" class="samples">
+      <h3>Some samples from the analyzed data:</h3>
      <div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
      <div id="negative-sample-div" class="sample"><h4>Negative tweet:</h4><div id="negative-sample"></div></div>
      <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>
  </div>
 </body>
+
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script src="https://platform.twitter.com/widgets.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script type='text/javascript'>
     // Show graphs
   var piegraph = {{piegraphJSON | safe}};
@@ -83,14 +202,13 @@
   Plotly.plot('piechart',piegraph,{});
   Plotly.plot('barchart',bargraph,{});
 </script>
-
 <script>
-    function createsample(sample, sample_counts, sample_div) {
+    function createsample(sample, data_count, sample_div) {
         // Embed sentiment tweet from results
         sample = JSON.parse(sample);
 
         let ut = "";
-        if (sample_counts == 0){
+        if (data_count == 0){
             ut = "<p>" + "Sample not found - no tweet example with this reaction from your search."
             sample_div.innerHTML = ut;
         }
