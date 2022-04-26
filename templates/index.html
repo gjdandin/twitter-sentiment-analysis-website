@@ -2,9 +2,10 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='index.css') }}">
     <script>
         function getInputs() {
             let searchterm = $("#searchterm").val()
@@ -104,9 +105,43 @@
 
   <div id="twitter-samples" class="samples">
       <h3>Some samples from the analyzed data:</h3>
-     <div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
+     {#<div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
      <div id="negative-sample-div" class="sample"><h4>Negative tweet:</h4><div id="negative-sample"></div></div>
-     <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>
+     <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>#}
+
+      <figure class="card-container">
+        <div class="profile-image"><img src="#" alt="profileimage1" /></div>
+        <figcaption>
+          <h3>John Doe</h3>
+          <h5>Founder</h5>
+          <p id="positive-sample" >Which is worse, that everyone has his price, or that the price is always so low.</p>
+          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
+            <a href="#"> <i class="ion-social-twitter"></i></a>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="card-container">
+        <div class="profile-image"><img src="#" alt="profile-image2" /></div>
+        <figcaption>
+          <h3>Jane Doe</h3>
+          <h5>Web Designer</h5>
+          <p id="negative-sample">I'm killing time while I wait for life to shower me with meaning and happiness.</p>
+          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
+            <a href="#"> <i class="ion-social-twitter"></i></a>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="card-container">
+        <div class="profile-image"><img src="#" alt="profile-image3" /></div>
+        <figcaption>
+          <h3>Ole Nordmann</h3>
+          <h5>Public Relations</h5>
+          <p id="neutral-sample">The only skills I have the patience to learn are those that have no real application in life. </p>
+          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
+            <a href="#"> <i class="ion-social-twitter"></i></a>
+          </div>
+        </figcaption>
+      </figure>
  </div>
 </body>
 

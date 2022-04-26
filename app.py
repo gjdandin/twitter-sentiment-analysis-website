@@ -6,7 +6,7 @@ import plotly.express as px
 import main
 import plotly.graph_objects as go
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 @app.route('/callback', methods=['POST', 'GET'])
 def cb():
@@ -15,7 +15,7 @@ def cb():
 @app.route('/')
 def index():
     results = twittersentimentgraph()
-    return render_template('percentage.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
+    return render_template('index.html', piegraphJSON=results["piegraphJSON"], bargraphJSON=results["bargraphJSON"],
                            positivesample=results["positivesample"], negativesample=results["negativesample"],
                            neutralsample=results["neutralsample"], positivedatacount=results["positivedatacount"],
                            negativedatacount=results["negativedatacount"], neutraldatacount=results["neutraldatacount"]
