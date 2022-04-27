@@ -54,7 +54,7 @@ def processsentiment(searchterm, numsearch):
     today = date.today()
     yesterday = today - timedelta(days = 1)
 
-    tweets = api.search_tweets(q=searchterm, lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    tweets = api.search_tweets(q=searchterm + "-filter:retweets", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
 
     neutralsample = ""
     positivesample = ""

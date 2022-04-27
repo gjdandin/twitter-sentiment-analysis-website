@@ -63,6 +63,15 @@ body {
     justify-content: center;
 }
 
+#twitter-samples .row {
+    display: flex;
+}
+
+.figure-element h4 {
+    display: flex;
+    justify-content: center;
+}
+
 nav {
     background-color: #212121;
     height: 80px;
@@ -91,4 +100,12 @@ nav .nav-logo a {
 }
 nav .nav-logo img {
     padding: 0 10px 10px 0;
+}
+
+#samples-header {
+    font-weight: 600;
+}
+
+.form-horizontal .control-label {
+    text-align: left;
 }

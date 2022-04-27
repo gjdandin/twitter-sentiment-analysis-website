@@ -21,7 +21,7 @@ def index():
                            negativedatacount=results["negativedatacount"], neutraldatacount=results["neutraldatacount"]
                            )
 
-def twittersentimentgraph(searchterm="Putin", numsearch="10"):
+def twittersentimentgraph(searchterm="Norway", numsearch="10"):
     data = main.processsentiment(searchterm, numsearch)
 
     #First figure - piechart - percentages
@@ -44,7 +44,8 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
 
     fig.update_layout(
         title_text="Percentage of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
-        paper_bgcolor='rgba(0,0,0,0)'
+        paper_bgcolor='rgba(0,0,0,0)',
+        width=800, height= 500
     )
 
     fig.add_annotation(x=0.5, y=0.5,
@@ -76,7 +77,9 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
                                x=0,
                                y=1.0,
                            ),
-                           paper_bgcolor='rgba(0,0,0,0)'
+                           paper_bgcolor='rgba(0,0,0,0)',
+                           width=800,
+                           height=500
                         )
 
     bargraphJSON = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
@@ -86,11 +89,23 @@ def twittersentimentgraph(searchterm="Putin", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
-    positivesamplejson = json.dumps({"text":positivesample.full_text, "author":positivesample.author.name, "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+    positivesamplejson = json.dumps({"text":positivesample.full_text, "author":positivesample.author.name,
+                                     "img":positivesample.user.profile_image_url_https,
+                                     "twitter_handle": positivesample.user.screen_name,
+                                     "link": f"https://twitter.com/{positivesample.user.screen_name}/status/{positivesample.id}",
+                                     "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+
     negativesamplejson = json.dumps({"text": negativesample.full_text, "author": negativesample.author.name,
-                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+                                     "img": negativesample.user.profile_image_url_https,
+                                     "twitter_handle": negativesample.user.screen_name,
+                                     "link": f"https://twitter.com/{negativesample.user.screen_name}/status/{negativesample.id}",
+                                     "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+
     neutralsamplejson = json.dumps({"text": neutralsample.full_text, "author": neutralsample.author.name,
-                      "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
+                                    "img": neutralsample.user.profile_image_url_https,
+                                    "twitter_handle": neutralsample.user.screen_name,
+                                    "link": f"https://twitter.com/{neutralsample.user.screen_name}/status/{neutralsample.id}",
+                                    "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
     #Data count
     positivedatacount = data["positivecount"]

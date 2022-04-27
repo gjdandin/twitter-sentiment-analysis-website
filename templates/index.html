@@ -24,6 +24,10 @@
             }
 
             let numsearch = $("#numsearch").val()
+            if (isNaN(numsearch)) {
+                document.getElementById("numsearch-error-warning").innerHTML = "<p>Insert a valid number.</p>";
+                numsearch = 0;
+            }
             if (numsearch != null) {
                 if (numsearch.valueOf() > 100 || numsearch.valueOf() <= 0) {
                     document.getElementById("numsearch-error-warning").style.display = 'block';
@@ -90,54 +94,64 @@
           <div id="searchterm-input-div" class="form-group">
               <label for="searchterm" class="control-label">Insert a twitter hashtag or a topic:</label>
               <input type="text" id="searchterm" name="searchterm" class="form-control" placeholder="# is already included" onchange="getInputs()">
-              <div id="searchterm-error-warning" class="alert alert-warning" style="padding: 0px;margin-bottom: 0px"></div>
+              <div id="searchterm-error-warning" class="alert alert-warning fade in"></div>
           </div>
           <div id="numsearch-input-div" class="form-group">
               <label for="numsearch" class="control-label">How many tweets?</label>
               <input type="text" id="numsearch" name="numsearch" class="form-control" placeholder="50 is a good amount to start with." onchange="getInputs()">
-              <div id="numsearch-error-warning" class="alert alert-warning" style="padding: 0px;margin-bottom: 0px"></div>
+              <div id="numsearch-error-warning" class="alert alert-warning fade in"></div>
           </div>
       </form>
   </div>
 
-  <div id='piechart' class='piechart'></div>
-  <div id='barchart' class='barchart'></div>
+    <div class="container-fluid" id="chart-container">
+        <div id='piechart' class='piechart'></div>
+        <div id='barchart' class='barchart'></div>
+    </div>
 
   <div id="twitter-samples" class="samples">
-      <h3>Some samples from the analyzed data:</h3>
+      <h3 id="samples-header">Some samples from the analyzed data</h3>
      {#<div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
      <div id="negative-sample-div" class="sample"><h4>Negative tweet:</h4><div id="negative-sample"></div></div>
      <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>#}
-
-      <figure class="card-container">
-        <div class="profile-image"><img src="#" alt="profileimage1" /></div>
-        <figcaption>
-          <h3>John Doe</h3>
-          <h5>Founder</h5>
-          <p id="positive-sample" >Which is worse, that everyone has his price, or that the price is always so low.</p>
-          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
-            <a href="#"> <i class="ion-social-twitter"></i></a>
+      <div class="row">
+          <div class="figure-element">
+              <h4>😃 Positive tweet</h4>
+              <figure class="card-container" id="positive-sample" >
+                <div class="profile-image"><img src="#" alt="profileimage1" /></div>
+                <figcaption>
+                  <h3>John Doe</h3>
+                  <h5>@Johndoe</h5>
+                  <p>Tweet text here.</p>
+                  <div class="icons">
+                    <a href="#"> <i class="ion-social-twitter"></i></a>
+                  </div>
+                </figcaption>
+              </figure>
           </div>
-        </figcaption>
-      </figure>
-      <figure class="card-container">
-        <div class="profile-image"><img src="#" alt="profile-image2" /></div>
-        <figcaption>
-          <h3>Jane Doe</h3>
-          <h5>Web Designer</h5>
-          <p id="negative-sample">I'm killing time while I wait for life to shower me with meaning and happiness.</p>
-          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
-            <a href="#"> <i class="ion-social-twitter"></i></a>
+          <div class="figure-element">
+              <h4>😠 Negative tweet</h4>
+              <figure class="card-container" id="negative-sample">
+                <div class="profile-image"><img src="#" alt="profile-image2" /></div>
+                <figcaption>
+                  <h3>Jane Doe</h3>
+                  <h5>@JaneDoe</h5>
+                  <p>Tweet text here.</p>
+                  <div class="icons">
+                    <a href="#"> <i class="ion-social-twitter"></i></a>
+                  </div>
+                </figcaption>
+              </figure>
           </div>
-        </figcaption>
-      </figure>
-      <figure class="card-container">
+      </div>
+      <h4>😐 Neutral tweet</h4>
+      <figure class="card-container" id="neutral-sample">
         <div class="profile-image"><img src="#" alt="profile-image3" /></div>
         <figcaption>
           <h3>Ole Nordmann</h3>
-          <h5>Public Relations</h5>
-          <p id="neutral-sample">The only skills I have the patience to learn are those that have no real application in life. </p>
-          <div class="icons"><a href="#"><i class="ion-social-reddit"></i></a>
+          <h5>@OleNordmann</h5>
+          <p>Tweet text here.</p>
+          <div class="icons">
             <a href="#"> <i class="ion-social-twitter"></i></a>
           </div>
         </figcaption>
@@ -167,7 +181,13 @@
             sample_div.innerHTML = ut;
         }
         else {
-            ut = "<p>" + "User " + sample.author + " tweets: " + "\n" + sample.text + "\n" + "Created at: " + sample.created_at + "</p>"
+            ut = '<div class="profile-image"><img src=' + sample.img + '></div>' +
+                '<figcaption><h3>' + sample.author + '</h3>' +
+                  '<h5> @' + sample.twitter_handle + '</h5>' +
+                  '<p>' + sample.text + '</p>' +
+                  '<h5>' + sample.created_at + '</h5>' +
+                  '<div class="icons"><a href=' + sample.link + '> <i class="ion-social-twitter"></i></a>' +
+                  '</div></figcaption>'
             sample_div.innerHTML = ut;
         }
     }
