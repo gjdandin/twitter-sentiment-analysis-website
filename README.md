@@ -1,8 +1,8 @@
 # twitter-sentiment-analysis-website
 Upcoming functions:
-0. Downloadable graphs?
-0.1 Url on twitter cards?
-1. Save states(sessions)
-2. Host the website on better server than heroku?
-3. Tests
-4. 
+1. Add a footer
+2. Save states(sessions)
+3. Host the website on better server than heroku?
+4. Ask for guidance on twitter anonymity
+5. Tests
+6. 

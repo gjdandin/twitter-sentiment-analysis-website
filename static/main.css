@@ -17,8 +17,13 @@ body {
     width: 400px !important;
 }
 
-.alert alert-warning {
+.alert-info {
     display:none;
+    color: #111111;
+    background-color: #c6ddef;
+    border-color: #0d0e0e;
+    font-size: x-large;
+    margin: 0.5% 0 2% 0;
 }
 
 .form-horizontal {
@@ -67,9 +72,14 @@ body {
     display: flex;
 }
 
+.figure-element {
+    margin: 1em 1em 0 1em;
+}
+
 .figure-element h4 {
     display: flex;
     justify-content: center;
+    font-weight: bold;
 }
 
 nav {
@@ -109,3 +119,4 @@ nav .nav-logo img {
 .form-horizontal .control-label {
     text-align: left;
 }
+

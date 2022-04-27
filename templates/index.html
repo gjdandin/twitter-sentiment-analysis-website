@@ -11,7 +11,7 @@
             let searchterm = $("#searchterm").val()
             if ((searchterm != null) && (searchterm.length < 2 || searchterm.length > 25)) {
                 document.getElementById("searchterm-error-warning").style.display = 'block';
-                document.getElementById("searchterm-error-warning").innerHTML = "<p>Search term must be longer than 2 characters and fewer than 25.</p>";
+                document.getElementById("searchterm-error-warning").innerHTML = "<p>&#9432 Search term must be longer than 2 characters and fewer than 25.</p>";
                 searchterm = "";
             }
 
@@ -25,13 +25,13 @@
 
             let numsearch = $("#numsearch").val()
             if (isNaN(numsearch)) {
-                document.getElementById("numsearch-error-warning").innerHTML = "<p>Insert a valid number.</p>";
+                document.getElementById("numsearch-error-warning").innerHTML = "<p>&#9432 You must insert a valid number.</p>";
                 numsearch = 0;
             }
             if (numsearch != null) {
                 if (numsearch.valueOf() > 100 || numsearch.valueOf() <= 0) {
                     document.getElementById("numsearch-error-warning").style.display = 'block';
-                    document.getElementById("numsearch-error-warning").innerHTML = "<p>Insert a number of tweets between 1 and 100.</p>";
+                    document.getElementById("numsearch-error-warning").innerHTML = "<p>&#9432 Insert a number of tweets between 1 and 100.</p>";
                     numsearch = 0;
                 }
             }
@@ -94,12 +94,12 @@
           <div id="searchterm-input-div" class="form-group">
               <label for="searchterm" class="control-label">Insert a twitter hashtag or a topic:</label>
               <input type="text" id="searchterm" name="searchterm" class="form-control" placeholder="# is already included" onchange="getInputs()">
-              <div id="searchterm-error-warning" class="alert alert-warning fade in"></div>
+              <div id="searchterm-error-warning" class="alert alert-info fade in"></div>
           </div>
           <div id="numsearch-input-div" class="form-group">
               <label for="numsearch" class="control-label">How many tweets?</label>
               <input type="text" id="numsearch" name="numsearch" class="form-control" placeholder="50 is a good amount to start with." onchange="getInputs()">
-              <div id="numsearch-error-warning" class="alert alert-warning fade in"></div>
+              <div id="numsearch-error-warning" class="alert alert-info fade in"></div>
           </div>
       </form>
   </div>
@@ -144,18 +144,20 @@
               </figure>
           </div>
       </div>
-      <h4>😐 Neutral tweet</h4>
-      <figure class="card-container" id="neutral-sample">
-        <div class="profile-image"><img src="#" alt="profile-image3" /></div>
-        <figcaption>
-          <h3>Ole Nordmann</h3>
-          <h5>@OleNordmann</h5>
-          <p>Tweet text here.</p>
-          <div class="icons">
-            <a href="#"> <i class="ion-social-twitter"></i></a>
-          </div>
-        </figcaption>
-      </figure>
+      <div class="figure-element">
+          <h4>😐 Neutral tweet</h4>
+          <figure class="card-container" id="neutral-sample">
+            <div class="profile-image"><img src="#" alt="profile-image3" /></div>
+            <figcaption>
+              <h3>Ole Nordmann</h3>
+              <h5>@OleNordmann</h5>
+              <p>Tweet text here.</p>
+              <div class="icons">
+                <a href="#"> <i class="ion-social-twitter"></i></a>
+              </div>
+            </figcaption>
+          </figure>
+      </div>
  </div>
 </body>
 
