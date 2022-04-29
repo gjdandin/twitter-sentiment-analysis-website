@@ -89,6 +89,7 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"):
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]
 
+    #Get the data we need from the sample and wrap it up in a JSON
     positivesamplejson = json.dumps({"text":positivesample.full_text, "author":positivesample.author.name,
                                      "img":positivesample.user.profile_image_url_https,
                                      "twitter_handle": positivesample.user.screen_name,
@@ -107,7 +108,7 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"):
                                     "link": f"https://twitter.com/{neutralsample.user.screen_name}/status/{neutralsample.id}",
                                     "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
-    #Data count
+    #Data count - for detecting sentiment categories with no sample
     positivedatacount = data["positivecount"]
     neutraldatacount = data["neutralcount"]
     negativedatacount = data["negativecount"]
