@@ -1,5 +1,6 @@
 from textblob import TextBlob
 import sys, tweepy, json
+import gunicorn
 import app
 import unittest
 import os
