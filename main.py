@@ -2,12 +2,11 @@ from textblob import TextBlob
 import sys,json, os
 import gunicorn
 import tweepy
+import app
 
 # Import the NLTK and tweet cleaner
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tweet_cleaner import clean_tweets
-
-import app
 
 # Import date and timedelta class for yesterdays date.
 # from datetime module
@@ -48,6 +47,7 @@ def processsentiment(searchterm, numsearch):
     yesterday = today - timedelta(days = 1)
 
     tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    #Tweets are filtering out retweets and links only.
 
     neutralsample = ""
     positivesample = ""
