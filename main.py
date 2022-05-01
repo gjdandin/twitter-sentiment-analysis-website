@@ -1,6 +1,11 @@
 from textblob import TextBlob
 import sys, tweepy, json
 import gunicorn
+from textblob.en.sentiments import NaiveBayesAnalyzer
+from textblob.classifiers import NaiveBayesClassifier
+from textblob import Blobber
+import pickle
+
 import app
 import unittest
 import os
@@ -55,28 +60,34 @@ def processsentiment(searchterm, numsearch):
     today = date.today()
     yesterday = today - timedelta(days = 1)
 
-    tweets = api.search_tweets(q=searchterm + "-filter:retweets", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
 
     neutralsample = ""
     positivesample = ""
     negativesample = ""
     dummy_sample = tweets[0]
 
-    for tweet in tweets:
-        analysis = TextBlob(tweet.full_text)
-        polarity += analysis.sentiment.polarity
+    #cl = pickle.load(open('sentiment_classifier.obj', 'rb')) #Loading pickled classifier trained on training.py
+    tb = Blobber(analyzer=NaiveBayesAnalyzer())
 
-        if (analysis.sentiment.polarity == 0.00):
+    for tweet in tweets:
+        analysis = tb(tweet.full_text)
+        polarity += (analysis.sentiment.p_pos - analysis.sentiment.p_neg)
+
+        if (-0.1 <= (analysis.sentiment.p_pos - analysis.sentiment.p_neg) <= 0.1):
+            print("Neutral:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             neutral += 1
             if (neutralsample == ""):
                 neutralsample = tweet
 
-        if (analysis.sentiment.polarity < 0.00):
+        if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) < -0.1):
+            print("Negative:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             negative += 1
             if (negativesample == ""):
                 negativesample = tweet
 
-        if (analysis.sentiment.polarity > 0.05):
+        if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) > 0.1):
+            print("Positive:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             positive += 1
             if (positivesample == ""):
                 positivesample = tweet
