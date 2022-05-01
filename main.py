@@ -29,17 +29,6 @@ api = tweepy.API(auth)
 #except:
     #print("Error during authentication")
 
-#Example of sentiment analysis
-# example = TextBlob("This is a very good item.")
-# example2 = TextBlob("What a horrible item.")
-#
-# print(example.sentiment.polarity)
-# print(example2.sentiment.polarity)
-
-#API search params
-#API.search_tweets(q, *, geocode, lang, locale, result_type, count, until, since_id,
-# max_id, include_entities)
-
 def percentage(part, whole):
     """Returns percentages of sentiment analysis"""
     return 100 * float(part)/float(whole)
