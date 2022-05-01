@@ -34,16 +34,6 @@ api = tweepy.API(auth)
 #except:
     #print("Error during authentication")
 
-#Example of sentiment analysis
-# example = TextBlob("This is a very good item.")
-# example2 = TextBlob("What a horrible item.")
-#
-# print(example.sentiment.polarity)
-# print(example2.sentiment.polarity)
-
-#API search params
-#API.search_tweets(q, *, geocode, lang, locale, result_type, count, until, since_id,
-# max_id, include_entities)
 
 def percentage(part, whole):
     """Returns percentages of sentiment analysis"""
@@ -75,19 +65,16 @@ def processsentiment(searchterm, numsearch):
         polarity += (analysis.sentiment.p_pos - analysis.sentiment.p_neg)
 
         if (-0.1 <= (analysis.sentiment.p_pos - analysis.sentiment.p_neg) <= 0.1):
-            print("Neutral:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             neutral += 1
             if (neutralsample == ""):
                 neutralsample = tweet
 
         if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) < -0.1):
-            print("Negative:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             negative += 1
             if (negativesample == ""):
                 negativesample = tweet
 
         if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) > 0.1):
-            print("Positive:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
             positive += 1
             if (positivesample == ""):
                 positivesample = tweet
