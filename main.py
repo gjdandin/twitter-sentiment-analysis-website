@@ -47,7 +47,7 @@ def processsentiment(searchterm, numsearch):
     yesterday = today - timedelta(days = 1)
 
     tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
-    #Tweets are filtering out retweets and links only.
+    #Tweets are filtering out retweets and purely link(spam) tweets.
 
     neutralsample = ""
     positivesample = ""
