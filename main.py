@@ -86,7 +86,7 @@ def processsentiment(searchterm, numsearch):
     if type(negativesample) != tweepy.models.Status:
         negativesample = dummy_sample
 
-
+    #Create the percentages for the donut graph.
     positivepercent = format(percentage(positive, numsearch), ".2f")
     negativepercent = format(percentage(negative, numsearch), ".2f")
     neutralpercent = format(percentage(neutral, numsearch), ".2f")
