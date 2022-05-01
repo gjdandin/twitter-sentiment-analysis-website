@@ -1,14 +1,13 @@
 from textblob import TextBlob
-import sys, tweepy, json
+import sys,json, os
 import gunicorn
-from textblob.en.sentiments import NaiveBayesAnalyzer
-from textblob.classifiers import NaiveBayesClassifier
-from textblob import Blobber
-import pickle
+import tweepy
+
+# Import the NLTK and tweet cleaner
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from tweet_cleaner import clean_tweets
 
 import app
-import unittest
-import os
 
 # Import date and timedelta class for yesterdays date.
 # from datetime module
@@ -34,17 +33,6 @@ api = tweepy.API(auth)
 #except:
     #print("Error during authentication")
 
-#Example of sentiment analysis
-# example = TextBlob("This is a very good item.")
-# example2 = TextBlob("What a horrible item.")
-#
-# print(example.sentiment.polarity)
-# print(example2.sentiment.polarity)
-
-#API search params
-#API.search_tweets(q, *, geocode, lang, locale, result_type, count, until, since_id,
-# max_id, include_entities)
-
 def percentage(part, whole):
     """Returns percentages of sentiment analysis"""
     return 100 * float(part)/float(whole)
@@ -54,7 +42,6 @@ def processsentiment(searchterm, numsearch):
     positive = 0
     neutral = 0
     negative = 0
-    polarity = 0
 
     # Latest tweets collected should be from yesterday at the very latest to return consistent results.
     today = date.today()
@@ -67,27 +54,23 @@ def processsentiment(searchterm, numsearch):
     negativesample = ""
     dummy_sample = tweets[0]
 
-    #cl = pickle.load(open('sentiment_classifier.obj', 'rb')) #Loading pickled classifier trained on training.py
-    tb = Blobber(analyzer=NaiveBayesAnalyzer())
+    analyser = SentimentIntensityAnalyzer() #Initialize Nltk sentiment analyzer
 
     for tweet in tweets:
-        analysis = tb(tweet.full_text)
-        polarity += (analysis.sentiment.p_pos - analysis.sentiment.p_neg)
+        cleaned_tweet = clean_tweets(tweet.full_text) #Clean the tweet text before analyzing
+        analysis = analyser.polarity_scores(cleaned_tweet)["compound"]
 
-        if (-0.1 <= (analysis.sentiment.p_pos - analysis.sentiment.p_neg) <= 0.1):
-            print("Neutral:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
+        if (analysis == 0.00):
             neutral += 1
             if (neutralsample == ""):
                 neutralsample = tweet
 
-        if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) < -0.1):
-            print("Negative:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
+        if (analysis < 0.00):
             negative += 1
             if (negativesample == ""):
                 negativesample = tweet
 
-        if ((analysis.sentiment.p_pos - analysis.sentiment.p_neg) > 0.1):
-            print("Positive:" + str((analysis.sentiment.p_pos - analysis.sentiment.p_neg)))
+        if (analysis > 0.00):
             positive += 1
             if (positivesample == ""):
                 positivesample = tweet
