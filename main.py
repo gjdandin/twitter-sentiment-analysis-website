@@ -4,7 +4,7 @@ import gunicorn
 import tweepy
 import app
 
-# Import the NLTK and tweet cleaner
+# Import the NLTK lexicon and tweet cleaner
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from tweet_cleaner import clean_tweets
 
