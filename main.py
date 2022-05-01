@@ -1,9 +1,12 @@
 from textblob import TextBlob
-import sys, tweepy, json
+import sys,json, os
 import gunicorn
+import tweepy
 import app
-import unittest
-import os
+
+# Import the NLTK and tweet cleaner
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from tweet_cleaner import clean_tweets
 
 # Import date and timedelta class for yesterdays date.
 # from datetime module
@@ -38,34 +41,36 @@ def processsentiment(searchterm, numsearch):
     positive = 0
     neutral = 0
     negative = 0
-    polarity = 0
 
     # Latest tweets collected should be from yesterday at the very latest to return consistent results.
     today = date.today()
     yesterday = today - timedelta(days = 1)
 
-    tweets = api.search_tweets(q=searchterm + "-filter:retweets", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    #Tweets are filtering out retweets and purely link(spam) tweets.
 
     neutralsample = ""
     positivesample = ""
     negativesample = ""
     dummy_sample = tweets[0]
 
-    for tweet in tweets:
-        analysis = TextBlob(tweet.full_text)
-        polarity += analysis.sentiment.polarity
+    analyser = SentimentIntensityAnalyzer() #Initialize Nltk sentiment analyzer
 
-        if (analysis.sentiment.polarity == 0.00):
+    for tweet in tweets:
+        cleaned_tweet = clean_tweets(tweet.full_text) #Clean the tweet text before analyzing
+        analysis = analyser.polarity_scores(cleaned_tweet)["compound"]
+
+        if (analysis == 0.00):
             neutral += 1
             if (neutralsample == ""):
                 neutralsample = tweet
 
-        if (analysis.sentiment.polarity < 0.00):
+        if (analysis < 0.00):
             negative += 1
             if (negativesample == ""):
                 negativesample = tweet
 
-        if (analysis.sentiment.polarity > 0.05):
+        if (analysis > 0.00):
             positive += 1
             if (positivesample == ""):
                 positivesample = tweet
