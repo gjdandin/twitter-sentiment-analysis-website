@@ -1,9 +1,9 @@
 # twitter-sentiment-analysis-website
 Upcoming functions:
-0. Anonymize tweet excerpts
-1. Make the most negative/positive excerpt the sample
-2. Add a loading circle when creating graphs
-3. Add a footer
-4. Save states(sessions)
-7. Tests
-8. 
+1. add optional submit button to the right of input fields 
+2. Mobile responsive
+3. Add a loading circle when creating graphs
+4. Add a footer
+5. Save states(sessions)
+6. Tests
+7. 

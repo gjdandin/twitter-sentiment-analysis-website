@@ -35,11 +35,10 @@
 }
 
 .card-container .profile-image img {
-  max-width: 100%;
+  max-width: 20%;
   vertical-align: top;
   position: relative;
   border-radius: 50%;
-  max-width: 40%;
 }
 
 .card-container figcaption {

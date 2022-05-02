@@ -111,12 +111,9 @@
 
   <div id="twitter-samples" class="samples">
       <h3 id="samples-header">Some samples from the analyzed data</h3>
-     {#<div id="positive-sample-div" class="sample"><h4>Positive tweet:</h4><div id="positive-sample"></div></div>
-     <div id="negative-sample-div" class="sample"><h4>Negative tweet:</h4><div id="negative-sample"></div></div>
-     <div id="neutral-sample-div" class="sample"><h4>Neutral tweet:</h4><div id="neutral-sample"></div></div>#}
       <div class="row">
           <div class="figure-element">
-              <h4>😃 Positive tweet</h4>
+              <h4>Positive tweet</h4>
               <figure class="card-container" id="positive-sample" >
                 <div class="profile-image"><img src="#" alt="profileimage1" /></div>
                 <figcaption>
@@ -130,7 +127,7 @@
               </figure>
           </div>
           <div class="figure-element">
-              <h4>😠 Negative tweet</h4>
+              <h4>Negative tweet</h4>
               <figure class="card-container" id="negative-sample">
                 <div class="profile-image"><img src="#" alt="profile-image2" /></div>
                 <figcaption>
@@ -145,7 +142,7 @@
           </div>
       </div>
       <div class="figure-element">
-          <h4>😐 Neutral tweet</h4>
+          <h4>Neutral tweet</h4>
           <figure class="card-container" id="neutral-sample">
             <div class="profile-image"><img src="#" alt="profile-image3" /></div>
             <figcaption>
@@ -185,10 +182,9 @@
         else {
             ut = '<div class="profile-image"><img src=' + sample.img + '></div>' +
                 '<figcaption><h3>' + sample.author + '</h3>' +
-                  '<h5> @' + sample.twitter_handle + '</h5>' +
                   '<p>' + sample.text + '</p>' +
                   '<h5>' + sample.created_at + '</h5>' +
-                  '<div class="icons"><a href=' + sample.link + '> <i class="ion-social-twitter"></i></a>' +
+                  '<div class="icons"><a href=' + sample.link + 'target="_blank"> <i class="ion-social-twitter"></i></a>' +
                   '</div></figcaption>'
             sample_div.innerHTML = ut;
         }

@@ -1,6 +1,8 @@
 /*Background */
 body {
+    min-height: 100vh;
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );
+    background-repeat: no-repeat;
     font-family: 'Roboto Slab', serif;
     line-height: 47.6px;
 }
@@ -110,6 +112,12 @@ nav .nav-logo a {
 }
 nav .nav-logo img {
     padding: 0 10px 10px 0;
+}
+
+nav .nav-logo span {
+    margin: auto;
+    margin-bottom: 0.7em;
+    margin-right: 0.5em;
 }
 
 #samples-header {

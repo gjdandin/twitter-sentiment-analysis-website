@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 import pandas as pd
 import json
 import plotly
@@ -38,19 +38,24 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"):
                                  )]
                     )
 
-    fig.update_traces(hoverinfo='label+percent', textinfo='label+percent', textfont_size=16,
+    fig.update_traces(hoverinfo='label+percent', textinfo='label+percent', textfont_size=24,
                       textposition="inside",
                       marker=dict(colors=colors, line=dict(color='#000000', width=2)))
 
     fig.update_layout(
         title_text="Percentage of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
+        title=dict(
+            font=dict(
+            family="Verdana",
+            size=24,
+        )),
         paper_bgcolor='rgba(0,0,0,0)',
-        width=800, height= 500
+        width=900, height= 600
     )
 
     fig.add_annotation(x=0.5, y=0.5,
                         text= numsearch + " Tweets",
-                        font=dict(size=12, family='Verdana',
+                        font=dict(size=16, family='Verdana',
                                   color='black'),
                         showarrow=False)
 
@@ -67,20 +72,34 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"):
         textposition='auto',
     )])
 
+    fig2.update_traces(textfont_size=18)
+
     fig2.update_layout(title_text="Number of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
+                           uniformtext_minsize=15,
+                           title=dict(
+                               font=dict(
+                               family="Verdana",
+                               size=24,
+                               )),
                            yaxis=dict(
                                title='Tweet reactions by count',
-                               titlefont_size=16,
-                               tickfont_size=14,
+                               titlefont_size=20,
+                               tickfont_size=20,
+                           ),
+                           xaxis=dict(
+                               tickfont_size=20
                            ),
                            legend=dict(
                                x=0,
                                y=1.0,
                            ),
                            paper_bgcolor='rgba(0,0,0,0)',
-                           width=800,
-                           height=500
+                           width=900,
+                           height=600,
                         )
+
+    fig2.update_xaxes(fixedrange= True)
+    fig2.update_yaxes(fixedrange= True)
 
     bargraphJSON = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -90,21 +109,21 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"):
     neutralsample = data["samples"]["neutralsample"]
 
     #Get the data we need from the sample and wrap it up in a JSON
-    positivesamplejson = json.dumps({"text":positivesample.full_text, "author":positivesample.author.name,
-                                     "img":positivesample.user.profile_image_url_https,
-                                     "twitter_handle": positivesample.user.screen_name,
+    positivesamplejson = json.dumps({"text":positivesample.full_text, "author":"AnonymousPositiveUser",
+                                     "img": url_for('static', filename='img/happy.png'),
+                                     "twitter_handle": "AnonymousPositiveUser",
                                      "link": f"https://twitter.com/{positivesample.user.screen_name}/status/{positivesample.id}",
                                      "created_at":positivesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
-    negativesamplejson = json.dumps({"text": negativesample.full_text, "author": negativesample.author.name,
-                                     "img": negativesample.user.profile_image_url_https,
-                                     "twitter_handle": negativesample.user.screen_name,
+    negativesamplejson = json.dumps({"text": negativesample.full_text, "author": "AnonymousNegativeUser",
+                                     "img": url_for('static', filename='img/angry.png'),
+                                     "twitter_handle": "AnonymousNegativeUser",
                                      "link": f"https://twitter.com/{negativesample.user.screen_name}/status/{negativesample.id}",
                                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
-    neutralsamplejson = json.dumps({"text": neutralsample.full_text, "author": neutralsample.author.name,
-                                    "img": neutralsample.user.profile_image_url_https,
-                                    "twitter_handle": neutralsample.user.screen_name,
+    neutralsamplejson = json.dumps({"text": neutralsample.full_text, "author": "AnonymousNeutralUser",
+                                    "img": url_for('static', filename='img/neutral.png'),
+                                    "twitter_handle": "AnonymousNeutralUser",
                                     "link": f"https://twitter.com/{neutralsample.user.screen_name}/status/{neutralsample.id}",
                                     "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 

@@ -6,7 +6,7 @@ import app
 
 # Import the NLTK lexicon and tweet cleaner
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from tweet_cleaner import clean_tweets
+from tweet_cleaner import clean_tweets, anonymize_tweet
 
 # Import date and timedelta class for yesterdays date.
 # from datetime module
@@ -46,7 +46,7 @@ def processsentiment(searchterm, numsearch):
     today = date.today()
     yesterday = today - timedelta(days = 1)
 
-    tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
+    tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links -filter:replies", lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
     #Tweets are filtering out retweets and purely link(spam) tweets.
 
     neutralsample = ""
@@ -67,12 +67,12 @@ def processsentiment(searchterm, numsearch):
 
         if (analysis < 0.00):
             negative += 1
-            if (negativesample == ""):
+            if (negativesample == "" or analyser.polarity_scores(clean_tweets(negativesample.full_text))["compound"] > analysis):
                 negativesample = tweet
 
         if (analysis > 0.00):
             positive += 1
-            if (positivesample == ""):
+            if (positivesample == "" or analyser.polarity_scores(clean_tweets(positivesample.full_text))["compound"] < analysis):
                 positivesample = tweet
 
 
@@ -85,6 +85,11 @@ def processsentiment(searchterm, numsearch):
 
     if type(negativesample) != tweepy.models.Status:
         negativesample = dummy_sample
+
+    #Anonymize the tweet samples
+    positivesample.full_text = anonymize_tweet(positivesample.full_text)
+    negativesample.full_text = anonymize_tweet(negativesample.full_text)
+    neutralsample.full_text = anonymize_tweet(neutralsample.full_text)
 
     #Create the percentages for the donut graph.
     positivepercent = format(percentage(positive, numsearch), ".2f")
