@@ -23,7 +23,7 @@ def clean_tweets(tweets):
 
 def anonymize_tweet(tweets):
     # remove twitter handles (@xxx)
-    tweets = re.sub('/(?<!\w)@[\w+]{1,15}\b/', '@anonymizedhandle', tweets)
+    tweets = re.sub('\B(@[\w\d_]+)', '@anonymizedhandle', tweets)
 
     # remove URL links (httpxxx)
     tweets = re.sub('https?:\/\/\S+', '', tweets)
