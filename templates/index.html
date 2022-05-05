@@ -1,12 +1,12 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='index.css') }}">
-    <script>
+    <script type="application/javascript">
         function getInputs() {
             let searchterm = $("#searchterm").val()
             if ((searchterm != null) && (searchterm.length < 2 || searchterm.length > 25)) {
@@ -47,17 +47,17 @@
 
         function cb(searchterm, numsearch) {
 
-            req = $.ajax({
-                    url : "/callback",
-                    type : "GET",
-                    data : {'searchterm':searchterm, 'numsearch':numsearch}
+            let req = $.ajax({
+                url: "/callback",
+                type: "GET",
+                data: {'searchterm': searchterm, 'numsearch': numsearch}
             });
 
             req.done(function(data) {
-                var graphs = JSON.parse(data);
-                var positive_sample_div = document.getElementById('positive-sample');
-                var negative_sample_div = document.getElementById('negative-sample');
-                var neutral_sample_div = document.getElementById('neutral-sample');
+                const graphs = JSON.parse(data);
+                const positive_sample_div = document.getElementById('positive-sample');
+                const negative_sample_div = document.getElementById('negative-sample');
+                const neutral_sample_div = document.getElementById('neutral-sample');
 
                 document.getElementById("piechart").style.display = 'flex';
                 document.getElementById("barchart").style.display = 'flex';
@@ -76,6 +76,7 @@
             });
     }
     </script>
+    <title>Twitter Sentiment Analyzer</title>
 </head>
 
 <body>
@@ -164,23 +165,25 @@
 
 <script type='text/javascript'>
     // Show graphs
-  var piegraph = {{piegraphJSON | safe}};
-  var bargraph = {{bargraphJSON | safe}};
-  Plotly.plot('piechart',piegraph,{});
-  Plotly.plot('barchart',bargraph,{});
+    let piegraph = {{piegraphJSON | safe}};
+    let bargraph = {{bargraphJSON | safe}};
+    // noinspection JSUnusedAssignment
+    Plotly.plot('piechart',piegraph,{});
+  // noinspection JSUnusedAssignment
+    Plotly.plot('barchart',bargraph,{});
 </script>
 <script>
     function createsample(sample, data_count, sample_div) {
         // Embed sentiment tweet from results
         sample = JSON.parse(sample);
 
-        let ut = "";
-        if (data_count == 0){
+        let ut;
+        if (data_count === 0){
             ut = "<p>" + "Sample not found - no tweet example with this reaction from your search."
             sample_div.innerHTML = ut;
         }
         else {
-            ut = '<div class="profile-image"><img src=' + sample.img + '></div>' +
+            ut = '<div class="profile-image"><img alt="Emotion image" src=' + sample.img + '></div>' +
                 '<figcaption><h3>' + sample.author + '</h3>' +
                   '<p>' + sample.text + '</p>' +
                   '<h5>' + sample.created_at + '</h5>' +
