@@ -1,9 +1,8 @@
 import re
 
 
-# cleaning the tweets
-
 def clean_tweets(tweets):
+    """Cleans the tweet text for easier/more accurate processing in NLTK"""
     # set to lower case
     tweets = tweets.lower()
 
@@ -24,6 +23,7 @@ def clean_tweets(tweets):
 
 
 def anonymize_tweet(tweets):
+    """Anonymizes the tweet text"""
     # remove twitter handles (@xxx)
     tweets = re.sub('\B(@[\w\d_]+)', '@anonymizeduser', tweets)
 

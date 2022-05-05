@@ -1,13 +1,10 @@
-import os
 # Import date and timedelta class for yesterdays date.
-# from datetime module
 from datetime import date
 from datetime import timedelta
-
+import os
 import tweepy
 # Import the NLTK lexicon and tweet cleaner
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
 from tweet_cleaner import clean_tweets, anonymize_tweet
 
 # Environment variables
@@ -45,21 +42,23 @@ def processsentiment(searchterm, numsearch):
     today = date.today()
     yesterday = today - timedelta(days=1)
 
+    # Tweet API call are filtering out retweets, purely link(spam) tweets and replies.
     tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links -filter:replies",
                                lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
 
-    # Tweets are filtering out retweets and purely link(spam) tweets.
-
+    # Init the samples
     neutralsample = ""
     positivesample = ""
     negativesample = ""
+
+    # Create a dummy sample for sample categories missing a sample.
     dummy_sample = tweets[0]
 
     analyser = SentimentIntensityAnalyzer()  # Initialize Nltk sentiment analyzer
 
     for tweet in tweets:
         cleaned_tweet = clean_tweets(tweet.full_text)  # Clean the tweet text before analyzing
-        analysis = analyser.polarity_scores(cleaned_tweet)["compound"]
+        analysis = analyser.polarity_scores(cleaned_tweet)["compound"]  # Get the compound sentiment score
 
         if analysis == 0.00:
             neutral += 1
@@ -70,12 +69,14 @@ def processsentiment(searchterm, numsearch):
             negative += 1
             if negativesample == "" \
                     or analyser.polarity_scores(clean_tweets(negativesample.full_text))["compound"] > analysis:
+                # Replace the negative sample if the current tweet obj has a lesser score
                 negativesample = tweet
 
         if analysis > 0.00:
             positive += 1
             if positivesample == "" \
                     or analyser.polarity_scores(clean_tweets(positivesample.full_text))["compound"] < analysis:
+                # Replace the positive sample if the current tweet obj has a greater score
                 positivesample = tweet
 
     # error handling - if sample is empty then set as dummy_sample
@@ -98,6 +99,7 @@ def processsentiment(searchterm, numsearch):
     negativepercent = format(percentage(negative, numsearch), ".2f")
     neutralpercent = format(percentage(neutral, numsearch), ".2f")
 
+    # Pass the results to app as key/val pairs.
     results = {"positivepercent": positivepercent, "negativepercent": negativepercent,
                "neutralpercent": neutralpercent, "positivecount": positive,
                "negativecount": negative, "neutralcount": neutral,
