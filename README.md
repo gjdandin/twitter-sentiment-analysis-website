@@ -9,6 +9,10 @@ Sentiment analysis are made with NLTK framework. Visualizations are generated in
 4. Add accessTokens and API keys as environment variables in main.py
 5. Run the flask app by writing "manage.py runserver" on console.
 
+#### About the branches
+The other branches use different NLP frameworks/methods than NLTK. Mainly Textblob and Textblobs NaiveBayesAnalyzer with an inferior trained model.
+After testing, NLTK was the most accurate framework at reading tweet data.
+
 
 #### Tasks left to do:
 1. Tests
