@@ -26,7 +26,7 @@ def index():
                            )
 
 
-# noinspection PyTypeChecker
+# Main function that creates the charts based on data from main
 def twittersentimentgraph(searchterm="Norway", numsearch="10"):
     data = main.processsentiment(searchterm, numsearch)
 
