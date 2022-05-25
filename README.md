@@ -1,6 +1,9 @@
 # Interactive Twitter sentiment analysis website
 An interactive website that analyses and visualizes the overall emotional sentiment of many tweets on a user-inserted topic through the use of the Natural Language Processing. Topic and amount of tweets to analyze are user inputs. Includes anonymized tweet samples as well from the topic dataset.
-Sentiment analysis are made with NLTK framework. Visualizations are generated in real-time by Plotly. API calls are made with Tweepy.
+
+Sentiment analysis are made with NLTK framework.
+Visualizations are generated in real-time by Plotly.
+API calls are made with Tweepy.
 
 ## Live website
 Check out the live website here: https://twitterreactionanalyse.herokuapp.com/
