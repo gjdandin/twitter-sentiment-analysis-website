@@ -1,4 +1,7 @@
 # Interactive Twitter sentiment analysis website
+By Gilhan Dandin
+
+
 An interactive website that analyses and visualizes the overall emotional sentiment of many tweets on a user-inserted topic through the use of the Natural Language Processing. Topic and amount of tweets to analyze are user inputs. Includes anonymized tweet samples as well from the topic dataset.
 
 Sentiment analysis are made with NLTK framework.
