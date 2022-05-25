@@ -4,7 +4,7 @@ Sentiment analysis are made with NLTK framework. Visualizations are generated in
 
 ## Live website
 Check out the live website here: https://twitterreactionanalyse.herokuapp.com/
-Apologies for the slow bootup time, it's hosted on a free dyno on Heroku :)
+>Apologies for the slow bootup time, it's hosted on a free dyno on Heroku :)
 
 ### Getting started
 1. Start a Flask project
