@@ -2,6 +2,10 @@
 A website that analyses and visualizes the overall emotional sentiment of tweets on a topic through the use of the Natural Language Processing.
 Sentiment analysis are made with NLTK framework. Visualizations are generated in real-time by Plotly. API calls are made with Tweepy.
 
+## Live website
+Check out the live website here: https://twitterreactionanalyse.herokuapp.com/
+Apologies for the slow bootup time, it's hosted on a free dyno on Heroku :)
+
 ### Getting started
 1. Start a Flask project
 2. Install the dependencies on requirements.txt
