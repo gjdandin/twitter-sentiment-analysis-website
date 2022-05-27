@@ -59,6 +59,7 @@
                 const negative_sample_div = document.getElementById('negative-sample');
                 const neutral_sample_div = document.getElementById('neutral-sample');
 
+                document.getElementById("chart-container").style.display = 'block';
                 document.getElementById("piechart").style.display = 'flex';
                 document.getElementById("barchart").style.display = 'flex';
                 document.getElementById("twitter-samples").style.display = 'flex';
@@ -73,6 +74,12 @@
                 createsample(graphs.positivesample,graphs.positivedatacount, positive_sample_div);
                 createsample(graphs.negativesample,graphs.negativedatacount, negative_sample_div);
                 createsample(graphs.neutralsample,graphs.neutraldatacount, neutral_sample_div);
+
+                const y = document.getElementById("piechart").getBoundingClientRect().top + window.scrollY;
+                window.scroll({
+                  top: y,
+                  behavior: 'smooth'
+                });
             });
     }
     </script>
@@ -90,6 +97,14 @@
             </a>
         </div>
     </nav>
+    <div class="container" id="text-box">
+        <h2>What is Twitter Sentiment Analysis?</h2>
+        <p>Twitter sentiment analysis generates graph visualizations of people's overall emotional reaction on tweets to a given topic or hashtag.
+            There are three valid reactions: positive, negative and neutral reaction and it is based on the text analysis of the tweet.
+            Simply insert a topic and a valid number (1-100) tweets that you want to analyze and we'll generate the graphs for you.
+        </p>
+        <p>Stuck? Press enter to submit input values or refresh the page.</p>
+    </div>
   <div class="container" id="form-container">
       <form class="form-horizontal" id="inputs">
           <div id="searchterm-input-div" class="form-group">
@@ -106,8 +121,11 @@
   </div>
 
     <div class="container-fluid" id="chart-container">
+        <hr class="solid">
         <div id='piechart' class='piechart'></div>
+        <hr class="solid">
         <div id='barchart' class='barchart'></div>
+        <hr class="solid">
     </div>
 
   <div id="twitter-samples" class="samples">
