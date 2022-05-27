@@ -41,7 +41,7 @@ body {
     color: #111111;
     background-color: #c6ddef;
     border-color: #0d0e0e;
-    font-size: x-large;
+    font-size: 32px;
     margin: 0.5% 0 2% 0;
 }
 
@@ -66,7 +66,7 @@ body {
 }
 
 .control-label {
-    font-size: xxx-large;
+    font-size: 48px;
 }
 
 #numsearch-input-div {
@@ -156,5 +156,12 @@ nav .nav-logo span {
 .solid {
     border-top: 2px solid #00000052;
     width:50vw;
+}
+
+@media (min-width: 320px) and (max-width: 768px) {
+    .control-label {
+        font-size: 48px;
+    }
+
 }
 
