@@ -15,9 +15,12 @@ Check out the live website here: https://twitterreactionanalyse.herokuapp.com/
 ### Getting started
 1. Start a Flask project
 2. Install the dependencies on requirements.txt
-3. Register a developer account on Twitter to access their API
-4. Add accessTokens and API keys as environment variables in main.py
-5. Run the flask app by writing "manage.py runserver" on console.
+3. install vader lexicon by typing the following in python console:
+   > import nltk
+> nltk.download('vader_lexicon')
+4. Register a developer account on Twitter to access their API
+5. Add accessTokens and API keys as environment variables in main.py
+6. Run the flask app by writing "manage.py runserver" on console.
 
 #### About the branches
 The other branches use different NLP frameworks/methods than NLTK. Mainly Textblob and Textblobs NaiveBayesAnalyzer with an inferior trained model.

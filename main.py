@@ -119,11 +119,12 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
     """Main function that generates the charts based on data from process sentiment"""
     data = processsentiment(searchterm, numsearch)
 
-    # First figure - piechart - percentages
+    # First figure - donutchart - percentages
     colors = ['lightgreen', 'darkred', 'gold']
     sentiment = ["😃 Positive", "😠 Negative", "😐 Neutral"]
     values = [data["positivepercent"], data["negativepercent"], data["neutralpercent"]]
 
+    #Create visualization figure
     fig = go.Figure(data=[go.Pie(labels=sentiment,
                                  values=values,
                                  textinfo='label+percent',
@@ -132,10 +133,12 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
                                  )]
                     )
 
+    #Add figure hover
     fig.update_traces(hoverinfo='label+percent', textinfo='label+percent', textfont_size=24,
                       textposition="inside",
                       marker=dict(colors=colors, line=dict(color='#000000', width=2)))
 
+    #Change the figure layout and add title
     fig.update_layout(
         title_text="Percentage of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
         title=dict(
@@ -148,6 +151,7 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
         width=900, height=600
     )
 
+    # Add donut chart inside text
     fig.add_annotation(x=0.5, y=0.5,
                        text=numsearch + " Tweets",
                        font=dict(
@@ -161,9 +165,13 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
     piegraph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     # Second graph - bar charts - counts
+    #color preset
     colors2 = ['#006f61', '#721817', '#F1B434']
+
+    #get data values for figure
     valuescount = [data["positivecount"], data["negativecount"], data["neutralcount"]]
-    # noinspection PyTypeChecker
+
+    # Create visualization figure
     fig2 = go.Figure(data=[go.Bar(
         x=sentiment,
         y=valuescount,
@@ -172,8 +180,10 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
         textposition='auto',
     )])
 
+    # add text traces on bars
     fig2.update_traces(textfont_size=18)
 
+    #Add figure layout
     fig2.update_layout(
         title_text="Number of reactions to #" + searchterm + " by analyzing " + numsearch + " recent tweets",
         uniformtext_minsize=15,
@@ -199,12 +209,13 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
         height=600,
     )
 
+    # Remove zooming, incompatible with mobile view
     fig2.update_xaxes(fixedrange=True)
     fig2.update_yaxes(fixedrange=True)
 
     bargraph_json = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
 
-    # Samples
+    # Get samples
     positivesample = data["samples"]["positivesample"]
     negativesample = data["samples"]["negativesample"]
     neutralsample = data["samples"]["neutralsample"]

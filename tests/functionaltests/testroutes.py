@@ -2,28 +2,50 @@ import pytest
 from flask import Flask
 import json
 from routes import configure_routes
-import os
+import templates, os
 
 
-# Build a constructor for testapp
+#add headers? on routes
+#check coverage
 
-
-def test_index():
-    app = Flask(__name__, template_folder=r"C:\Users\Gilhan Jentrix\Dropbox\tests-twitter-analyse\templates")
+def app_constructor():
+    """Creates a mock test flask app to test with"""
+    app = Flask(__name__, template_folder=r"C:\Users\gilha\Dropbox\tests-twitter-analyse\templates")
     app.debug = True
     configure_routes(app)
-    client = app.test_client()
+    app = app.test_client()
+    return app
+
+def test_index():
+    """Test index page"""
+    client = app_constructor()
+
     url = "/"
     response = client.get(url)
+    assert response.status_code == 200
     assert "Insert a twitter hashtag or a topic:" in str(response.data)
 
 
 def test_callback():
-    app = Flask(__name__)
-    app.debug = True
-    configure_routes(app)
-    client = app.test_client()
+    """Test that callback route returns correct responses"""
+    client = app_constructor()
+
     url = "/callback?searchterm=Oslo&numsearch=20"
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert "Oslo" in str(response.data)
+    assert "20" in str(response.data) #Assert that the search queries are in the response
+    assert "piegraphJSON" in str(response.data) #Assert that the visualization jsons are in response
+
+def test_callback_failure():
+    """Test that a callback with missing queries returns an error"""
+    client = app_constructor()
+    url = "/callback?searchterm=&numsearch="
 
     response = client.get(url)
-    assert response.status_code == 200
+
+    assert response.status_code == 404
+    assert "Norway" not in str(response.data) #Make sure that default values are not returned as well
+    assert "10" not in str(response.data)  # Assert that the search queries are not in the response
+    assert "piegraphJSON" not in str(response.data)  # Assert that the visualization jsons are not in response
