@@ -4,10 +4,6 @@ import json
 from routes import configure_routes
 import templates, os
 
-
-#add headers? on routes
-#check coverage
-
 def app_constructor():
     """Creates a mock test flask app to test with"""
     app = Flask(__name__, template_folder=r"C:\Users\gilha\Dropbox\tests-twitter-analyse\templates")
@@ -15,6 +11,7 @@ def app_constructor():
     configure_routes(app)
     app = app.test_client()
     return app
+
 
 def test_index():
     """Test index page"""
@@ -36,7 +33,14 @@ def test_callback():
     assert response.status_code == 200
     assert "Oslo" in str(response.data)
     assert "20" in str(response.data) #Assert that the search queries are in the response
+
     assert "piegraphJSON" in str(response.data) #Assert that the visualization jsons are in response
+    assert "bargraphJSON" in str(response.data)  # Assert that the visualization jsons are in response
+
+    assert "neutralsample" in str(response.data) # Assert that the samples are in the response
+    assert "negativesample" in str(response.data)
+    assert "positivesample" in str(response.data)
+
 
 def test_callback_failure():
     """Test that a callback with missing queries returns an error"""
@@ -45,7 +49,8 @@ def test_callback_failure():
 
     response = client.get(url)
 
-    assert response.status_code == 404
+    assert response.status_code == 404 #Assert that it sends an error
     assert "Norway" not in str(response.data) #Make sure that default values are not returned as well
-    assert "10" not in str(response.data)  # Assert that the search queries are not in the response
+    assert "10" not in str(response.data)
     assert "piegraphJSON" not in str(response.data)  # Assert that the visualization jsons are not in response
+    assert "bargraphJSON" not in str(response.data)

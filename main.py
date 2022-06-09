@@ -50,7 +50,7 @@ def processsentiment(searchterm, numsearch):
     tweets = api.search_tweets(q=searchterm + "-filter:retweets -filter:links -filter:replies",
                                lang="en", count=numsearch, until=yesterday, tweet_mode="extended")
 
-    # Init the samples
+    # Initialize the samples
     neutralsample = ""
     positivesample = ""
     negativesample = ""
@@ -119,6 +119,7 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
     """Main function that generates the charts based on data from process sentiment"""
     data = processsentiment(searchterm, numsearch)
 
+    # ------------------------- Charts ------------------------------
     # First figure - donutchart - percentages
     colors = ['lightgreen', 'darkred', 'gold']
     sentiment = ["😃 Positive", "😠 Negative", "😐 Neutral"]
@@ -215,6 +216,8 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
 
     bargraph_json = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
 
+
+    # ------------------ Samples -----------------------
     # Get samples
     positivesample = data["samples"]["positivesample"]
     negativesample = data["samples"]["negativesample"]
@@ -234,16 +237,18 @@ def twittersentimentgraph(searchterm="Norway", numsearch="10"): #These are defau
                                      "created_at": negativesample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
     neutralsamplejson = json.dumps({"text": neutralsample.full_text, "author": "AnonymousNeutralUser",
-                                    "img": url_for('static', filename='img/neutral.png'),
+                                    "img": url_for('static', filename='img/neutral.png'), #Should be url_for('static', filename='img/neutral.png') but for testing we use local dir
                                     "twitter_handle": "AnonymousNeutralUser",
                                     "link": f"https://twitter.com/{neutralsample.user.screen_name}/status/{neutralsample.id}",
                                     "created_at": neutralsample.created_at.strftime("%m/%d/%Y, %H:%M:%S")})
 
+    # --------------------- Counts --------------------
     # Data count - for detecting sentiment categories with no sample
     positivedatacount = data["positivecount"]
     neutraldatacount = data["neutralcount"]
     negativedatacount = data["negativecount"]
 
+    # --------------------- Returns -------------------
     funcresults = {"piegraphJSON": piegraph_json, "bargraphJSON": bargraph_json,
                    "positivesample": positivesamplejson,
                    "negativesample": negativesamplejson,
