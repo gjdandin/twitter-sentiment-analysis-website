@@ -9,7 +9,7 @@ Visualizations are generated in real-time by Plotly.
 API calls are made with Tweepy.
 
 # Tweet Scraping with a free account has been depreciated since 2023
-## However, this application still works with a paid twitter basic developer account - set the right accessTokens/api keys
+However, this application still works with a paid twitter basic developer account - set the right accessTokens/api keys
 
 ### Getting started
 1. Start a Flask project
